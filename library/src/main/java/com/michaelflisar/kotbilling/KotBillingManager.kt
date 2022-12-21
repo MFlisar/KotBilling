@@ -2,6 +2,7 @@ package com.michaelflisar.kotbilling
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import com.android.billingclient.api.*
 import com.michaelflisar.kotbilling.classes.*
 import com.michaelflisar.kotbilling.results.*
@@ -11,7 +12,7 @@ import kotlin.coroutines.suspendCoroutine
 
 internal class KotBillingManager(
     context: Context,
-    var logger: ((level: LogLevel, message: String) -> Unit)? = null
+    var logger: ((level: Int, info: String, e: Exception?) -> Unit)? = null
 ) {
 
     private var client: BillingClient
@@ -60,14 +61,16 @@ internal class KotBillingManager(
                 override fun onBillingSetupFinished(result: BillingResult) {
                     if (result.responseCode == BillingClient.BillingResponseCode.OK) {
                         logger?.invoke(
-                            LogLevel.Info,
-                            "[KotBilling::connect] Connected to PlayStore successful"
+                            Log.DEBUG,
+                            "[KotBilling::connect] Connected to PlayStore successful",
+                            null
                         )
                         flowConnectionState.tryEmit(ConnectionState.Connected)
                     } else {
                         logger?.invoke(
-                            LogLevel.Error,
-                            "[KotBilling::connect] Connecting to PlayStore failed | responseCode = ${result.responseCode} | message = ${result.debugMessage}"
+                            Log.ERROR,
+                            "[KotBilling::connect] Connecting to PlayStore failed | responseCode = ${result.responseCode} | message = ${result.debugMessage}",
+                            null
                         )
                         flowConnectionState.tryEmit(
                             ConnectionState.Error(
@@ -80,8 +83,9 @@ internal class KotBillingManager(
 
                 override fun onBillingServiceDisconnected() {
                     logger?.invoke(
-                        LogLevel.Info,
-                        "[KotBilling::connect] Disconnected from PlayStore"
+                        Log.DEBUG,
+                        "[KotBilling::connect] Disconnected from PlayStore",
+                        null
                     )
                     flowConnectionState.tryEmit(ConnectionState.Disconnected)
                 }
@@ -114,16 +118,21 @@ internal class KotBillingManager(
         val productDetailsList = result.productDetailsList
 
         return if (result.billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
-            val error = KBError(KBError.ErrorType.QueryProductDetailsFailed(products, result.billingResult), connectionState)
+            val error = KBError(
+                KBError.ErrorType.QueryProductDetailsFailed(products, result.billingResult),
+                connectionState
+            )
             logger?.invoke(
-                LogLevel.Error,
-                "[KotBilling::queryProducts] Failed! | productDetailsList = ${result.productDetailsList?.size} | error = $error}"
+                Log.ERROR,
+                "[KotBilling::queryProducts] Failed! | productDetailsList = ${result.productDetailsList?.size} | error = $error}",
+                null
             )
             error
         } else {
             logger?.invoke(
-                LogLevel.Info,
-                "[KotBilling::queryProducts] Query executed | products = ${products.joinToString(",")}"
+                Log.DEBUG,
+                "[KotBilling::queryProducts] Query executed | products = ${products.joinToString(",")}",
+                null
             )
             // we keep the order of the products
             val details = products.mapNotNull { p ->
@@ -152,16 +161,21 @@ internal class KotBillingManager(
         val result = client.queryPurchasesAsync(queryPurchasesParams)
 
         return if (result.billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
-            val error = KBError(KBError.ErrorType.QueryPurchasesFailed(productType, result.billingResult), connectionState)
+            val error = KBError(
+                KBError.ErrorType.QueryPurchasesFailed(productType, result.billingResult),
+                connectionState
+            )
             logger?.invoke(
-                LogLevel.Error,
-                "[KotBilling::queryPurchases] Failed! | purchasesList = ${result.purchasesList.size} | error = $error}"
+                Log.ERROR,
+                "[KotBilling::queryPurchases] Failed! | purchasesList = ${result.purchasesList.size} | error = $error}",
+                null
             )
             error
         } else {
             logger?.invoke(
-                LogLevel.Info,
-                "[KotBilling::queryPurchases] Query executed | productType = $productType}"
+                Log.DEBUG,
+                "[KotBilling::queryPurchases] Query executed | productType = $productType}",
+                null
             )
             val details = result.purchasesList.map { WrappedPurchaseDetails(it) }
             KBPurchaseQuery(productType, details)
@@ -201,11 +215,14 @@ internal class KotBillingManager(
                 when (result.responseCode) {
                     BillingClient.BillingResponseCode.OK -> {
                         logger?.invoke(
-                            LogLevel.Info,
-                            "[KotBilling::purchase] Purchase succeeded | product = $product | purchases = ${purchases?.size}"
+                            Log.DEBUG,
+                            "[KotBilling::purchase] Purchase succeeded | product = $product | purchases = ${purchases?.size}",
+                            null
                         )
-                        val purchaseDetails = purchases?.map { WrappedPurchaseDetails(it) } ?: emptyList()
-                        val purchaseDetailsResult = KBPurchaseDetails(product, details, purchaseDetails)
+                        val purchaseDetails =
+                            purchases?.map { WrappedPurchaseDetails(it) } ?: emptyList()
+                        val purchaseDetailsResult =
+                            KBPurchaseDetails(product, details, purchaseDetails)
                         cont.resumeWith(Result.success(purchaseDetailsResult))
                     }
                     BillingClient.BillingResponseCode.USER_CANCELED -> {
@@ -214,8 +231,9 @@ internal class KotBillingManager(
                             connectionState
                         )
                         logger?.invoke(
-                            LogLevel.Error,
-                            "[KotBilling::purchase] Purchase cancelled by user! | error = $error}"
+                            Log.ERROR,
+                            "[KotBilling::purchase] Purchase cancelled by user! | error = $error}",
+                            null
                         )
                         cont.resumeWith(Result.success(error))
                     }
@@ -226,8 +244,9 @@ internal class KotBillingManager(
                             connectionState
                         )
                         logger?.invoke(
-                            LogLevel.Error,
-                            "[KotBilling::purchase] Purchase failed by user! | error = $error}"
+                            Log.ERROR,
+                            "[KotBilling::purchase] Purchase failed by user! | error = $error}",
+                            null
                         )
                         cont.resumeWith(Result.success(error))
                     }
@@ -239,8 +258,9 @@ internal class KotBillingManager(
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                 // we wait for purchaseCallback - it must be called soon
                 logger?.invoke(
-                    LogLevel.Info,
-                    "[KotBilling::purchase] Waiting for purchase callback to retrieve result form PlayStore... | product = $product"
+                    Log.DEBUG,
+                    "[KotBilling::purchase] Waiting for purchase callback to retrieve result form PlayStore... | product = $product",
+                    null
                 )
             } else {
                 // reset callback and handle error here...
@@ -250,8 +270,9 @@ internal class KotBillingManager(
                     connectionState
                 )
                 logger?.invoke(
-                    LogLevel.Error,
-                    "[KotBilling::purchase] launchBillingFlow failed! | error = $error}"
+                    Log.ERROR,
+                    "[KotBilling::purchase] launchBillingFlow failed! | error = $error}",
+                    null
                 )
                 cont.resumeWith(Result.success(error))
             }
@@ -270,24 +291,34 @@ internal class KotBillingManager(
                     if (successfullyConsumed) {
                         KBPurchase(purchaseDetailsResult)
                     } else {
-                        val error = KBError(KBError.ErrorType.ConsumesFailed(product, details, results), connectionState)
+                        val error = KBError(
+                            KBError.ErrorType.ConsumesFailed(product, details, results),
+                            connectionState
+                        )
                         logger?.invoke(
-                            LogLevel.Error,
-                            "[KotBilling::purchase] Consume failed! | error = $error}"
+                            Log.ERROR,
+                            "[KotBilling::purchase] Consume failed! | error = $error}",
+                            null
                         )
                         error
                     }
                 } else {
-                    val results = purchases.map { acknowledgePurchase(product, it, connectionState) }
+                    val results =
+                        purchases.map { acknowledgePurchase(product, it, connectionState) }
                     // result should only acknowledged entries
-                    val allSuccessfullyAcknowledged = results.count { it is KBAcknowledgeResult && it.type == KBAcknowledgeResult.Type.SuccessfullyAcknowledges } == results.size
+                    val allSuccessfullyAcknowledged =
+                        results.count { it is KBAcknowledgeResult && it.type == KBAcknowledgeResult.Type.SuccessfullyAcknowledges } == results.size
                     if (allSuccessfullyAcknowledged) {
                         KBPurchase(purchaseDetailsResult)
                     } else {
-                        val error = KBError(KBError.ErrorType.AcknowledgesFailed(product, details, results), connectionState)
+                        val error = KBError(
+                            KBError.ErrorType.AcknowledgesFailed(product, details, results),
+                            connectionState
+                        )
                         logger?.invoke(
-                            LogLevel.Error,
-                            "[KotBilling::purchase] Acknowledge failed! | error = $error}"
+                            Log.ERROR,
+                            "[KotBilling::purchase] Acknowledge failed! | error = $error}",
+                            null
                         )
                         error
                     }
@@ -296,7 +327,11 @@ internal class KotBillingManager(
         }
     }
 
-    suspend fun acknowledgePurchase(product: Product, details: WrappedPurchaseDetails, connectionState: ConnectionState) : IKBAcknowledgeResult {
+    suspend fun acknowledgePurchase(
+        product: Product,
+        details: WrappedPurchaseDetails,
+        connectionState: ConnectionState
+    ): IKBAcknowledgeResult {
         return if (details.purchaseState == Purchase.PurchaseState.PURCHASED) {
             if (!details.isAcknowledged) {
                 val acknowledgePurchaseParams = AcknowledgePurchaseParams
@@ -305,19 +340,29 @@ internal class KotBillingManager(
                     .build()
                 val result = client.acknowledgePurchase(acknowledgePurchaseParams)
                 if (result.responseCode == BillingClient.BillingResponseCode.OK) {
-                     KBAcknowledgeResult(KBAcknowledgeResult.Type.SuccessfullyAcknowledges, details)
+                    KBAcknowledgeResult(KBAcknowledgeResult.Type.SuccessfullyAcknowledges, details)
                 } else {
-                    KBError(KBError.ErrorType.AcknowledgeFailed(product, details, result), connectionState)
+                    KBError(
+                        KBError.ErrorType.AcknowledgeFailed(product, details, result),
+                        connectionState
+                    )
                 }
             } else {
                 KBAcknowledgeResult(KBAcknowledgeResult.Type.AlreadyAcknowledged, details)
             }
         } else {
-            KBError(KBError.ErrorType.AcknowledgeFailedProductNotPurchased(product, details), connectionState)
+            KBError(
+                KBError.ErrorType.AcknowledgeFailedProductNotPurchased(product, details),
+                connectionState
+            )
         }
     }
 
-    suspend fun consumePurchase(product: Product, details: WrappedPurchaseDetails, connectionState: ConnectionState) : IKBConsumeResult {
+    suspend fun consumePurchase(
+        product: Product,
+        details: WrappedPurchaseDetails,
+        connectionState: ConnectionState
+    ): IKBConsumeResult {
         val consumeParams =
             ConsumeParams.newBuilder()
                 .setPurchaseToken(details.purchaseToken)

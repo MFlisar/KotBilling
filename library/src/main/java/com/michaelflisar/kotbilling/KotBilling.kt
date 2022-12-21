@@ -9,7 +9,7 @@ object KotBilling {
 
     private lateinit var manager: KotBillingManager
 
-    fun init(context: Context, logger: ((level: LogLevel, message: String) -> Unit)?) {
+    fun init(context: Context, logger: ((level: Int, info: String, e: Exception?) -> Unit)?) {
         manager = KotBillingManager(context, logger)
     }
 

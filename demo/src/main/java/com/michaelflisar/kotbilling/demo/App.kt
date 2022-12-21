@@ -2,18 +2,17 @@ package com.michaelflisar.kotbilling.demo
 
 import android.app.Application
 import com.michaelflisar.kotbilling.KotBilling
-import com.michaelflisar.kotbilling.classes.LogLevel
 import com.michaelflisar.lumberjack.L
 
 class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        KotBilling.init(this) { level, message ->
-            if (level == LogLevel.Info) {
-                L.callStackCorrection(2).d { message }
+        KotBilling.init(this) { level, info, exception ->
+            if (exception != null) {
+                L.callStackCorrection(2).tag("KOTBILLING-LOG").log(level, exception) { info }
             } else {
-                L.callStackCorrection(2).e { message }
+                L.callStackCorrection(2).tag("KOTBILLING-LOG").log(level) { info }
             }
         }
     }
