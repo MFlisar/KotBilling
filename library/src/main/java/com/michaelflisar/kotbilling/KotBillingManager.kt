@@ -11,8 +11,7 @@ import kotlinx.coroutines.flow.first
 import kotlin.coroutines.suspendCoroutine
 
 internal class KotBillingManager(
-    context: Context,
-    var logger: ((level: Int, info: String, e: Exception?) -> Unit)? = null
+    context: Context
 ) {
 
     private var client: BillingClient
@@ -60,14 +59,14 @@ internal class KotBillingManager(
             client.startConnection(object : BillingClientStateListener {
                 override fun onBillingSetupFinished(result: BillingResult) {
                     if (result.responseCode == BillingClient.BillingResponseCode.OK) {
-                        logger?.invoke(
+                        KotBilling.logger?.invoke(
                             Log.DEBUG,
                             "[KotBilling::connect] Connected to PlayStore successful",
                             null
                         )
                         flowConnectionState.tryEmit(ConnectionState.Connected)
                     } else {
-                        logger?.invoke(
+                        KotBilling.logger?.invoke(
                             Log.ERROR,
                             "[KotBilling::connect] Connecting to PlayStore failed | responseCode = ${result.responseCode} | message = ${result.debugMessage}",
                             null
@@ -82,7 +81,7 @@ internal class KotBillingManager(
                 }
 
                 override fun onBillingServiceDisconnected() {
-                    logger?.invoke(
+                    KotBilling.logger?.invoke(
                         Log.DEBUG,
                         "[KotBilling::connect] Disconnected from PlayStore",
                         null
@@ -122,14 +121,14 @@ internal class KotBillingManager(
                 KBError.ErrorType.QueryProductDetailsFailed(products, result.billingResult),
                 connectionState
             )
-            logger?.invoke(
+            KotBilling.logger?.invoke(
                 Log.ERROR,
                 "[KotBilling::queryProducts] Failed! | productDetailsList = ${result.productDetailsList?.size} | error = $error}",
                 null
             )
             error
         } else {
-            logger?.invoke(
+            KotBilling.logger?.invoke(
                 Log.DEBUG,
                 "[KotBilling::queryProducts] Query executed | products = ${products.joinToString(",")}",
                 null
@@ -165,14 +164,14 @@ internal class KotBillingManager(
                 KBError.ErrorType.QueryPurchasesFailed(productType, result.billingResult),
                 connectionState
             )
-            logger?.invoke(
+            KotBilling.logger?.invoke(
                 Log.ERROR,
                 "[KotBilling::queryPurchases] Failed! | purchasesList = ${result.purchasesList.size} | error = $error}",
                 null
             )
             error
         } else {
-            logger?.invoke(
+            KotBilling.logger?.invoke(
                 Log.DEBUG,
                 "[KotBilling::queryPurchases] Query executed | productType = $productType}",
                 null
@@ -214,7 +213,7 @@ internal class KotBillingManager(
             purchaseCallback = PurchasesUpdatedListener { result, purchases ->
                 when (result.responseCode) {
                     BillingClient.BillingResponseCode.OK -> {
-                        logger?.invoke(
+                        KotBilling.logger?.invoke(
                             Log.DEBUG,
                             "[KotBilling::purchase] Purchase succeeded | product = $product | purchases = ${purchases?.size}",
                             null
@@ -230,7 +229,7 @@ internal class KotBillingManager(
                             KBError.ErrorType.PurchaseCancelled(product, details),
                             connectionState
                         )
-                        logger?.invoke(
+                        KotBilling.logger?.invoke(
                             Log.ERROR,
                             "[KotBilling::purchase] Purchase cancelled by user! | error = $error}",
                             null
@@ -243,7 +242,7 @@ internal class KotBillingManager(
                             KBError.ErrorType.PurchaseFailed(product, details, result),
                             connectionState
                         )
-                        logger?.invoke(
+                        KotBilling.logger?.invoke(
                             Log.ERROR,
                             "[KotBilling::purchase] Purchase failed by user! | error = $error}",
                             null
@@ -257,7 +256,7 @@ internal class KotBillingManager(
             val billingResult = client.launchBillingFlow(activity, billingFlowParams)
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                 // we wait for purchaseCallback - it must be called soon
-                logger?.invoke(
+                KotBilling.logger?.invoke(
                     Log.DEBUG,
                     "[KotBilling::purchase] Waiting for purchase callback to retrieve result form PlayStore... | product = $product",
                     null
@@ -269,7 +268,7 @@ internal class KotBillingManager(
                     KBError.ErrorType.PurchaseFailed(product, details, billingResult),
                     connectionState
                 )
-                logger?.invoke(
+                KotBilling.logger?.invoke(
                     Log.ERROR,
                     "[KotBilling::purchase] launchBillingFlow failed! | error = $error}",
                     null
@@ -295,7 +294,7 @@ internal class KotBillingManager(
                             KBError.ErrorType.ConsumesFailed(product, details, results),
                             connectionState
                         )
-                        logger?.invoke(
+                        KotBilling.logger?.invoke(
                             Log.ERROR,
                             "[KotBilling::purchase] Consume failed! | error = $error}",
                             null
@@ -315,7 +314,7 @@ internal class KotBillingManager(
                             KBError.ErrorType.AcknowledgesFailed(product, details, results),
                             connectionState
                         )
-                        logger?.invoke(
+                        KotBilling.logger?.invoke(
                             Log.ERROR,
                             "[KotBilling::purchase] Acknowledge failed! | error = $error}",
                             null

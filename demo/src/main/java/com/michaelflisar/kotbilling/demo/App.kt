@@ -8,7 +8,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        KotBilling.init(this) { level, info, exception ->
+        KotBilling.logger = { level, info, exception ->
             if (exception != null) {
                 L.callStackCorrection(2).tag("KOTBILLING-LOG").log(level, exception) { info }
             } else {

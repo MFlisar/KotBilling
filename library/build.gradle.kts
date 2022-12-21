@@ -55,6 +55,7 @@ dependencies {
 
     implementation(androidx.core)
     implementation(androidx.lifecycle)
+    implementation(androidx.startup)
 
     // ------------------------
     // Others

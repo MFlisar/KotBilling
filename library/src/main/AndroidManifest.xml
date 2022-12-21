@@ -1,6 +1,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.michaelflisar.kotbilling">
 
     <uses-permission android:name="com.android.vending.BILLING" />
+
+    <application>
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            tools:node="merge"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false">
+
+            <meta-data
+                android:name="com.michaelflisar.kotbilling.initialisation.Initialiser"
+                android:value="androidx.startup" />
+        </provider>
+    </application>
 
 </manifest>
