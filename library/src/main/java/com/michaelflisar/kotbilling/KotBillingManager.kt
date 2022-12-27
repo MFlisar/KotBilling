@@ -215,7 +215,19 @@ internal class KotBillingManager(
                     BillingClient.BillingResponseCode.OK -> {
                         KotBilling.logger?.invoke(
                             Log.DEBUG,
-                            "[KotBilling::purchase] Purchase succeeded | product = $product | purchases = ${purchases?.size}",
+                            "[KotBilling::purchase] Purchase - PURCHASE SUCCESS | product = $product | purchases = ${purchases?.size}",
+                            null
+                        )
+                        val purchaseDetails =
+                            purchases?.map { WrappedPurchaseDetails(it) } ?: emptyList()
+                        val purchaseDetailsResult =
+                            KBPurchaseDetails(product, details, purchaseDetails)
+                        cont.resumeWith(Result.success(purchaseDetailsResult))
+                    }
+                    BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
+                        KotBilling.logger?.invoke(
+                            Log.DEBUG,
+                            "[KotBilling::purchase] Purchase - ALREADY OWNED | product = $product | purchases = ${purchases?.size}",
                             null
                         )
                         val purchaseDetails =
