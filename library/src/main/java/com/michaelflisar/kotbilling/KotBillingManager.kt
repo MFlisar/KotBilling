@@ -316,9 +316,10 @@ internal class KotBillingManager(
                 } else {
                     val results =
                         purchases.map { acknowledgePurchase(product, it, connectionState) }
-                    // result should only acknowledged entries
+                    // result should only contain acknowledged entries
+                    // type... could be SuccessfullyAcknowledges or AlreadyAcknowledged => we handle both the same way => as success
                     val allSuccessfullyAcknowledged =
-                        results.count { it is KBAcknowledgeResult && it.type == KBAcknowledgeResult.Type.SuccessfullyAcknowledges } == results.size
+                        results.count { it is KBAcknowledgeResult } == results.size
                     if (allSuccessfullyAcknowledged) {
                         KBPurchase(purchaseDetailsResult)
                     } else {
@@ -338,7 +339,7 @@ internal class KotBillingManager(
         }
     }
 
-    suspend fun acknowledgePurchase(
+    private suspend fun acknowledgePurchase(
         product: Product,
         details: WrappedPurchaseDetails,
         connectionState: ConnectionState
@@ -369,7 +370,7 @@ internal class KotBillingManager(
         }
     }
 
-    suspend fun consumePurchase(
+    private suspend fun consumePurchase(
         product: Product,
         details: WrappedPurchaseDetails,
         connectionState: ConnectionState
