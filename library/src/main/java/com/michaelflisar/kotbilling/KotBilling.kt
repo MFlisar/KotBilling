@@ -32,7 +32,7 @@ object KotBilling {
             ConnectionState.Disconnected,
             is ConnectionState.Error -> {
                 return KBError(
-                    KBError.ErrorType.Connection,
+                    KBError.ErrorType.ConnectionFailed,
                     connectionState
                 )
             }
@@ -56,7 +56,7 @@ object KotBilling {
             ConnectionState.Disconnected,
             is ConnectionState.Error -> {
                 return KBError(
-                    KBError.ErrorType.Connection,
+                    KBError.ErrorType.ConnectionFailed,
                     connectionState
                 )
             }
@@ -84,7 +84,7 @@ object KotBilling {
             ConnectionState.Disconnected,
             is ConnectionState.Error -> {
                 return KBError(
-                    KBError.ErrorType.Connection,
+                    KBError.ErrorType.ConnectionFailed,
                     connectionState
                 )
             }
@@ -128,7 +128,7 @@ object KotBilling {
             ConnectionState.Disconnected,
             is ConnectionState.Error -> {
                 return KBError(
-                    KBError.ErrorType.Connection,
+                    KBError.ErrorType.ConnectionFailed,
                     connectionState
                 )
             }

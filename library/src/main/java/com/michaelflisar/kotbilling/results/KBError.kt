@@ -11,7 +11,9 @@ data class KBError(
 ) : IKBProductResult, IKBPurchaseDetailsResult, IKBPurchaseQueryResult, IKBAcknowledgeResult, IKBConsumeResult, IKBPurchaseResult {
 
     sealed class ErrorType {
-        object Connection : ErrorType()
+        object ConnectionFailed : ErrorType() {
+            override fun toString() = "ConnectionFailed"
+        }
         data class QueryProductDetailsFailed(val products: List<Product>, val result: BillingResult) : ErrorType() {
             override fun toString(): String {
                 return "QueryProductDetailsFailed(products=[${products.joinToString(",")}],result=${result.logInfo()})"
