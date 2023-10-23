@@ -15,7 +15,7 @@ A kotlin coroutine based solution for handling in app purchases.
 
 | Dependency | Version |
 |:-|-:|
-| [Billing](com.android.billingclient:billing-ktx) | `6.0.1` |
+| com.android.billingclient:billing | `6.0.1` |
 
 ### Gradle (via [JitPack.io](https://jitpack.io/))
 
