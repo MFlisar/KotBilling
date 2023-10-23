@@ -73,7 +73,7 @@ object KotBilling {
     suspend fun purchase(
         activity: Activity,
         product: Product,
-        offerToken: String?
+        offerToken: String? = null
     ): IKBPurchaseResult {
 
         val connectionState = manager.connect()

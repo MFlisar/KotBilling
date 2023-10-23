@@ -16,7 +16,7 @@ data class WrappedPurchaseDetails(
     val developerPayload: String,
     val isAcknowledged: Boolean,
     val isAutoRenewing: Boolean,
-    val orderId: String,
+    val orderId: String?,
     val quantity: Int,
     val signature: String
 ) : Parcelable {

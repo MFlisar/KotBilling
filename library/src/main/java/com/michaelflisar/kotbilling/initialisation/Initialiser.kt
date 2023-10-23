@@ -5,7 +5,7 @@ import androidx.startup.Initializer
 import com.michaelflisar.kotbilling.KotBilling
 
 class Initialiser : Initializer<Unit> {
-    override fun create(context: Context): Unit {
+    override fun create(context: Context) {
         KotBilling.init(context)
     }
 

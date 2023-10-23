@@ -7,6 +7,8 @@ plugins {
 
 android {
 
+    namespace = "com.michaelflisar.kotbilling"
+
     compileSdk = app.versions.compileSdk.get().toInt()
 
     buildFeatures {
@@ -15,7 +17,6 @@ android {
 
     defaultConfig {
         minSdk = app.versions.minSdk.get().toInt()
-        targetSdk = app.versions.targetSdk.get().toInt()
         vectorDrawables.useSupportLibrary = true
     }
 
@@ -28,12 +29,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     lint {

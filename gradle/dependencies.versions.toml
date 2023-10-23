@@ -1,39 +1,23 @@
 [versions]
 
 # mflisar
-text = 				"1.2"
 lumberjack = 		"5.3.0"
 
 # google
-material =			"1.7.0"
-ads =               "21.4.0"
-
-billing =		    "5.1.0"
+material =			"1.10.0"
+billing =		    "6.0.1"
 
 # others
-fastadapter =		"5.4.1"
-glide =				"4.13.2"
-glide-transform =	"4.3.0"
-viewpagerdots =		"1.0.0"
-materialize =		"1.2.0"
 popupmenu =		    "4.1.0"
 
 [libraries]
 
 # mflisar
-androidtext = 			{ module = "com.github.MFlisar:AndroidText", 							version.ref = "text" }
 lumberjack =			{ module = "com.github.MFlisar.Lumberjack:lumberjack-library", 			version.ref = "lumberjack" }
 
 # google
 material = 				{ module = "com.google.android.material:material", 						version.ref = "material" }
-ads = 		            { module = "com.google.android.gms:play-services-ads",                  version.ref = "ads" }
-
 billing =			     { module = "com.android.billingclient:billing-ktx", 					version.ref = "billing" }
 
 # others
-fastadapter =			{ module = "com.mikepenz:fastadapter", 									version.ref = "fastadapter" }
-glide =					{ module = "com.github.bumptech.glide:glide", 							version.ref = "glide" }
-glide-transformations =	{ module = "jp.wasabeef:glide-transformations", 						version.ref = "glide-transform" }
-viewpagerdots =			{ module = "com.afollestad:viewpagerdots", 								version.ref = "viewpagerdots" }
-materialize =			{ module = "com.mikepenz:materialize", 									version.ref = "materialize" }
 popupmenu =			    { module = "com.github.zawadz88.materialpopupmenu:material-popup-menu", version.ref = "popupmenu" }

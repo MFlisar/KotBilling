@@ -1,6 +1,3 @@
-//enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-enableFeaturePreview("VERSION_CATALOGS")
-
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
@@ -9,6 +6,9 @@ dependencyResolutionManagement {
         maven("https://jitpack.io")
     }
     versionCatalogs {
+
+        val kotlin = "1.9.10"
+        val gradle = "8.1.2"
 
         // TOML Files
         create("androidx") {
@@ -19,18 +19,17 @@ dependencyResolutionManagement {
         }
 
         // Rest
-        val kotlin = "1.7.20"
         create("tools") {
             version("kotlin", kotlin)
-            version("gradle", "7.2.2")
-            version("maven", "2.0")
+            version("gradle", gradle)
         }
         create("app") {
-            version("compileSdk", "32")
+            version("compileSdk", "34")
             version("minSdk", "21")
-            version("targetSdk", "32")
+            version("targetSdk", "34")
         }
         create("libs") {
+            // Kotlin
             library("kotlin", "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin")
         }
     }

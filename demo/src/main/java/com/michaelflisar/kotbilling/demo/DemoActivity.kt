@@ -12,14 +12,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.github.zawadz88.materialpopupmenu.popupMenu
 import com.michaelflisar.kotbilling.KotBilling
+import com.michaelflisar.kotbilling.classes.ProductType
 import com.michaelflisar.kotbilling.demo.databinding.ActivityDemoBinding
+import com.michaelflisar.kotbilling.results.KBError
+import com.michaelflisar.kotbilling.results.KBProductDetailsList
+import com.michaelflisar.kotbilling.results.KBPurchase
+import com.michaelflisar.kotbilling.results.KBPurchaseQuery
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class DemoActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivityDemoBinding
+    private lateinit var binding: ActivityDemoBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +32,71 @@ class DemoActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.btAction.setOnClickListener {
             showActionMenu(it)
+        }
+
+        lifecycleScope.launch(Dispatchers.IO) {
+
+            addInfo("Quering prodcuts...")
+
+            val result = KotBilling.queryProducts(
+                listOf(
+                    DemoBillingSetup.PRODUCT_NOT_CONSUMABLE,
+                    DemoBillingSetup.PRODUCT_CONSUMABLE
+                )
+            )
+
+            when (result) {
+                is KBError -> {
+                    val connectionState = result.connectionState
+                    val errorType = result.errorType
+                    //when (errorType) {
+                    //    // handle all possible error cases differently if needed
+                    //}
+                    addInfo("Query Products - Error", listOf(connectionState.toString(), errorType.toString()))
+                }
+                is KBProductDetailsList -> {
+                    if (result.details.isEmpty()) {
+                        addInfo("Query Products - Result", listOf("No products found!"))
+                    } else {
+                        result.details.forEach {
+                            val product = it.product
+                            val details = it.details
+                            addInfo("Product $product", listOf(details.toString()))
+                        }
+                    }
+                }
+            }
+
+        }
+
+        lifecycleScope.launch(Dispatchers.IO) {
+
+            addInfo("Quering purchases...")
+
+            val result = KotBilling.queryPurchases(ProductType.InApp)
+            // or subscriptions
+            // val result = KotBilling.queryPurchases(ProductType.Subscription)
+
+            when (result) {
+                is KBError -> {
+                    val connectionState = result.connectionState
+                    val errorType = result.errorType
+                    //when (errorType) {
+                    //    // handle all possible error cases differently if needed
+                    //}
+                    addInfo("Query Purchases - Error", listOf(connectionState.toString(), errorType.toString()))
+                }
+                is KBPurchaseQuery -> {
+                    if (result.details.isEmpty()) {
+                        addInfo("Query Purchases", listOf("No purchases found!"))
+                    } else {
+                        val productType = result.productType
+                        result.details.forEach {
+                            addInfo("Query Purchases - Purchase", listOf(it.toString()))
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -43,7 +113,8 @@ class DemoActivity : AppCompatActivity() {
                     label = "Test Purchased"
                     callback = {
                         lifecycleScope.launch(Dispatchers.IO) {
-                            val result = KotBilling.queryProducts(listOf(DemoBillingSetup.PRODUCT_NOT_CONSUMABLE))
+                            val result =
+                                KotBilling.queryProducts(listOf(DemoBillingSetup.PRODUCT_NOT_CONSUMABLE))
                             val title = label.toString()
                             val info = result.toString()
                             addInfo(title, listOf(info))
@@ -57,7 +128,21 @@ class DemoActivity : AppCompatActivity() {
                     label = "Test Purchase"
                     callback = {
                         lifecycleScope.launch(Dispatchers.IO) {
-                            val result = KotBilling.purchase(this@DemoActivity, DemoBillingSetup.PRODUCT_NOT_CONSUMABLE, null)
+                            val result = KotBilling.purchase(
+                                this@DemoActivity,
+                                DemoBillingSetup.PRODUCT_NOT_CONSUMABLE,
+                                null
+                            )
+                            when (result) {
+                                is KBError -> {
+                                    // error
+                                }
+                                is KBPurchase -> {
+                                    // success
+                                    val purchase = result.purchase
+                                    // here you can get the purchase details and
+                                }
+                            }
                             val title = label.toString()
                             val info = result.toString()
                             addInfo(title, listOf(info))
@@ -80,7 +165,7 @@ class DemoActivity : AppCompatActivity() {
 
     private val infoData = ArrayList<Info>()
 
-    private suspend fun addInfo(title: String, infos: List<String>) {
+    private suspend fun addInfo(title: String, infos: List<String> = emptyList()) {
 
         val sb = SpannableStringBuilder()
         infoData.add(Info(title, infos))
