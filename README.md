@@ -21,17 +21,22 @@ A kotlin coroutine based solution for handling in app purchases for **billing li
 
 1) Add jitpack to your project's build.gradle:
 
-```groovy
+```gradle
 repositories {
 	maven { url "https://jitpack.io" }
 }
 ```
 
-2) Add the compile statement to your module's build.gradle:
-3) 
-```groovy
+2. add the compile statement to your module's `build.gradle`:
+
+gradle
+```gradle
 dependencies {
-	implementation 'com.github.MFlisar:KotBilling:<LAST VERSION>'
+
+    val kotBilling = "<LATEST-VERSION>"
+  
+    // core module
+    implementation("com.github.MFlisar:KotBilling:$kotPreferences")
 }
 ```
 
@@ -127,4 +132,8 @@ lifecycleScope.launch(Dispatchers.IO) {
 
 ```
 
-For a full example, check out the demo app. But be aware, the demo app is not deployed on google play so it won't return any results - still it shows how to use the library.
+### Demo
+
+A full demo is included inside the [demo module](https://github.com/MFlisar/KotBilling/tree/main/demo).
+
+But be aware, the demo app is not deployed on google play so it won't return any results - still it shows how to use the library.

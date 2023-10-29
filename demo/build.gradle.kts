@@ -62,6 +62,5 @@ dependencies {
 
     implementation(project(":library"))
 
-    implementation(deps.lumberjack)
     implementation(deps.popupmenu)
 }
