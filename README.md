@@ -3,7 +3,7 @@
 [![Release](https://jitpack.io/v/MFlisar/KotBilling.svg)](https://jitpack.io/#MFlisar/KotBilling)
 ![License](https://img.shields.io/github/license/MFlisar/KotBilling)
 
-<i>A kotlin coroutine based solution for handling in app purchases for **billing library version 6**.</i>
+A kotlin coroutine based solution for handling in app purchases for **billing library version 6**.
 
 ## :book: Documentation
 
