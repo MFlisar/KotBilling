@@ -3,8 +3,8 @@
 # mflisar
 
 # google
-material =			"1.10.0"
-billing =		    "6.0.1"
+material =			"1.11.0"
+billing =		    "6.2.0"
 
 # others
 popupmenu =		    "4.1.0"
