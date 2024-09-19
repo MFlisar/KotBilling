@@ -20,9 +20,9 @@ A kotlin coroutine based solution for handling in app purchases for **billing li
 
 ## :link: Dependencies
 
-| Dependency                                                                                                                    |                                                        Version |
-|:------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------:|
-| [com.android.billingclient:billing-ktx](https://mvnrepository.com/artifact/com.android.billingclient/billing-ktx?repo=google) | `{{ projects[page.meta.library]['dependencies']['billing'] }}` |
+| Dependency                                                                                                                    | Version |
+|:------------------------------------------------------------------------------------------------------------------------------|--------:|
+| [com.android.billingclient:billing-ktx](https://mvnrepository.com/artifact/com.android.billingclient/billing-ktx?repo=google) | `7.0.0` |
 
 ## :elephant: Gradle
 
@@ -34,7 +34,7 @@ This library is distributed via [maven central](https://central.sonatype.com/).
 val kotbilling = "<LATEST-VERSION>"
 
 implementation("io.github.mflisar.kotbilling:library:$kotbilling")
-``` |
+```
 
 ## </> Basic Usage
 
