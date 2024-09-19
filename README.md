@@ -46,7 +46,7 @@ It works as simple as following:
 // Quering available product(s)
 // --------------------
 
-lifecycleScope.launch(Dispatchers.IO) {
+scope.launch(Dispatchers.IO) {
 
     val result = KotBilling.queryProducts(
         listOf(/* products to query */)
@@ -77,7 +77,7 @@ lifecycleScope.launch(Dispatchers.IO) {
 // Quering purchase(s)
 // --------------------
 
-lifecycleScope.launch(Dispatchers.IO) {
+scope.launch(Dispatchers.IO) {
     
     val result = KotBilling.queryPurchases(ProductType.InApp) // or ProductType.Subscription
     when (result) {
@@ -103,7 +103,7 @@ lifecycleScope.launch(Dispatchers.IO) {
 // Purchasing a product
 // --------------------
 
-lifecycleScope.launch(Dispatchers.IO) {
+scope.launch(Dispatchers.IO) {
     val result = KotBilling.purchase(
         context,
         /* product */,
