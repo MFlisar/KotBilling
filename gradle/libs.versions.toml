@@ -1,14 +1,45 @@
 [versions]
 
-gradle = 				"8.3.2"
-kotlin = 				"1.9.23"
+gradle = 				        "8.5.2"
+kotlin = 				        "2.0.20"
+dokka =                         "1.9.20"
+gradle-maven-publish-plugin =   "0.29.0"
+
+# KotlinX / AndroidX / Google
+compose =                       "1.6.11"
+androidx-core = 				"1.13.1"
+androidx-lifecycle = 		    "2.8.6"
+androidx-appcompat = 		    "1.7.0"
+androidx-startup = 	            "1.2.0"
+
+billing =		                "7.0.0"
+demoutilities =                 "1.0.3"
 
 [plugins]
 
+android-application = 			    { id = "com.android.application",                   version.ref = "gradle" }
+android-library = 			        { id = "com.android.library", 	                    version.ref = "gradle" }
+
+kotlin-android = 				    { id = "org.jetbrains.kotlin.android", 			    version.ref = "kotlin" }
+kotlin-compose = 				    { id = "org.jetbrains.kotlin.plugin.compose", 	    version.ref = "kotlin" }
+kotlin-parcelize =                  { id = "org.jetbrains.kotlin.plugin.parcelize",     version.ref = "kotlin"  }
+
+dokka =                             { id = "org.jetbrains.dokka",                       version.ref = "dokka" }
+gradle-maven-publish-plugin =       { id = "com.vanniktech.maven.publish.base",         version.ref = "gradle-maven-publish-plugin" }
+
 [libraries]
 
-gradle =						{ module = "com.android.tools.build:gradle", 									version.ref = "gradle" }
-kotlin-gradle-plugin =			{ module = "org.jetbrains.kotlin:kotlin-gradle-plugin", 						version.ref = "kotlin" }
-kotlin-serialization =			{ module = "org.jetbrains.kotlin:kotlin-serialization", 						version.ref = "kotlin" }
+kotlin =						    { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", 		version.ref = "kotlin" }
 
-kotlin =						{ module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", 							version.ref = "kotlin" }
+androidx-core = 				    { module = "androidx.core:core-ktx", 						version.ref = "androidx-core" }
+androidx-lifecycle = 		        { module = "androidx.lifecycle:lifecycle-runtime-ktx", 		version.ref = "androidx-lifecycle" }
+androidx-appcompat = 		        { module = "androidx.appcompat:appcompat", 					version.ref = "androidx-appcompat" }
+androidx-startup = 		            { module = "androidx.startup:startup-runtime", 			    version.ref = "androidx-startup" }
+
+compose-material-icons-core = 	    { module = "org.jetbrains.compose.material:material-icons-core",        version.ref = "compose" }
+compose-material-icons-extended = 	{ module = "org.jetbrains.compose.material:material-icons-extended",    version.ref = "compose" }
+compose-material3 =                 { module = "org.jetbrains.compose.material3:material3",                 version.ref = "compose" }
+
+billing =			                { module = "com.android.billingclient:billing-ktx", 		version.ref = "billing" }
+demoutilities-core =                { module = "io.github.mflisar.demoutilities:core", 			version.ref = "demoutilities" }
+demoutilities-app =                 { module = "io.github.mflisar.demoutilities:app", 			version.ref = "demoutilities" }

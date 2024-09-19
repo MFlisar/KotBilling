@@ -1,8 +1,7 @@
 plugins {
-    id("com.android.application")
-    id("kotlin-android")
-    id("kotlin-parcelize")
-    id("kotlin-kapt")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -13,6 +12,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        compose = true
     }
 
     defaultConfig {
@@ -51,10 +51,13 @@ dependencies {
     // AndroidX
     // ------------------------
 
-    implementation(androidx.core)
-    implementation(androidx.lifecycle)
-    implementation(androidx.appcompat)
-    implementation(deps.material)
+    implementation(libs.androidx.core)
+    implementation(libs.androidx.lifecycle)
+    implementation(libs.androidx.appcompat)
+
+    implementation(libs.compose.material3)
+    implementation(libs.compose.material.icons.core)
+    implementation(libs.compose.material.icons.extended)
 
     // ------------------------
     // Libraries
@@ -62,5 +65,8 @@ dependencies {
 
     implementation(project(":library"))
 
-    implementation(deps.popupmenu)
+    //implementation(libs.popupmenu)
+
+    implementation(libs.demoutilities.core)
+    implementation(libs.demoutilities.app)
 }

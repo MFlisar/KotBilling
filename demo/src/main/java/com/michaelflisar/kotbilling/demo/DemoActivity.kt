@@ -1,19 +1,28 @@
 package com.michaelflisar.kotbilling.demo
 
 import android.graphics.Color
-import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
-import android.view.Gravity
-import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
-import com.github.zawadz88.materialpopupmenu.popupMenu
+import com.michaelflisar.demoutilities.DemoActivity
+import com.michaelflisar.demoutilities.composables.DemoAppThemeRegionDetailed
+import com.michaelflisar.demoutilities.composables.DemoCollapsibleRegion
+import com.michaelflisar.demoutilities.composables.ExpandedRegionState
+import com.michaelflisar.composethemer.ComposeTheme
 import com.michaelflisar.kotbilling.KotBilling
 import com.michaelflisar.kotbilling.classes.ProductType
-import com.michaelflisar.kotbilling.demo.databinding.ActivityDemoBinding
 import com.michaelflisar.kotbilling.results.KBError
 import com.michaelflisar.kotbilling.results.KBProductDetailsList
 import com.michaelflisar.kotbilling.results.KBPurchase
@@ -22,136 +31,185 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class DemoActivity : AppCompatActivity() {
+class DemoActivity : DemoActivity(
+    scrollableContent = false
+) {
+    override val initialExpandedRegions = listOf(1, 2)
 
-    private lateinit var binding: ActivityDemoBinding
+    @Composable
+    override fun ColumnScope.Content(
+        regionsState: ExpandedRegionState,
+        themeState: ComposeTheme.State
+    ) {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityDemoBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        binding.btAction.setOnClickListener {
-            showActionMenu(it)
-        }
+        val infoData = remember { mutableStateListOf<Info>() }
 
-        lifecycleScope.launch(Dispatchers.IO) {
+        LaunchedEffect(Unit) {
+            withContext(Dispatchers.IO) {
 
-            addInfo("Quering prodcuts...")
-
-            val result = KotBilling.queryProducts(
-                listOf(
-                    DemoBillingSetup.PRODUCT_NOT_CONSUMABLE,
-                    DemoBillingSetup.PRODUCT_CONSUMABLE
+                addInfo(infoData, "Quering prodcuts...")
+                val result = KotBilling.queryProducts(
+                    listOf(
+                        DemoBillingSetup.PRODUCT_NOT_CONSUMABLE,
+                        DemoBillingSetup.PRODUCT_CONSUMABLE
+                    )
                 )
-            )
-
-            when (result) {
-                is KBError -> {
-                    val connectionState = result.connectionState
-                    val errorType = result.errorType
-                    //when (errorType) {
-                    //    // handle all possible error cases differently if needed
-                    //}
-                    addInfo("Query Products - Error", listOf(connectionState.toString(), errorType.toString()))
-                }
-                is KBProductDetailsList -> {
-                    if (result.details.isEmpty()) {
-                        addInfo("Query Products - Result", listOf("No products found!"))
-                    } else {
-                        result.details.forEach {
-                            val product = it.product
-                            val details = it.details
-                            addInfo("Product $product", listOf(details.toString()))
-                        }
+                when (result) {
+                    is KBError -> {
+                        val connectionState = result.connectionState
+                        val errorType = result.errorType
+                        //when (errorType) {
+                        //    // handle all possible error cases differently if needed
+                        //}
+                        addInfo(
+                            infoData,
+                            "Query Products - Error",
+                            listOf(connectionState.toString(), errorType.toString())
+                        )
                     }
-                }
-            }
 
-        }
-
-        lifecycleScope.launch(Dispatchers.IO) {
-
-            addInfo("Quering purchases...")
-
-            val result = KotBilling.queryPurchases(ProductType.InApp)
-            // or subscriptions
-            // val result = KotBilling.queryPurchases(ProductType.Subscription)
-
-            when (result) {
-                is KBError -> {
-                    val connectionState = result.connectionState
-                    val errorType = result.errorType
-                    //when (errorType) {
-                    //    // handle all possible error cases differently if needed
-                    //}
-                    addInfo("Query Purchases - Error", listOf(connectionState.toString(), errorType.toString()))
-                }
-                is KBPurchaseQuery -> {
-                    if (result.details.isEmpty()) {
-                        addInfo("Query Purchases", listOf("No purchases found!"))
-                    } else {
-                        val productType = result.productType
-                        result.details.forEach {
-                            addInfo("Query Purchases - Purchase", listOf(it.toString()))
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    // --------------
-    // functions
-    // --------------
-
-    private fun showActionMenu(view: View) {
-        val popupMenu = popupMenu {
-            dropdownGravity = Gravity.BOTTOM
-            section {
-                title = "QUERY - One Time Purchases"
-                item {
-                    label = "Test Purchased"
-                    callback = {
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            val result =
-                                KotBilling.queryProducts(listOf(DemoBillingSetup.PRODUCT_NOT_CONSUMABLE))
-                            val title = label.toString()
-                            val info = result.toString()
-                            addInfo(title, listOf(info))
-                        }
-                    }
-                }
-            }
-            section {
-                title = "PURCHASE - One Time Purchases"
-                item {
-                    label = "Test Purchase"
-                    callback = {
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            val result = KotBilling.purchase(
-                                this@DemoActivity,
-                                DemoBillingSetup.PRODUCT_NOT_CONSUMABLE,
-                                null
+                    is KBProductDetailsList -> {
+                        if (result.details.isEmpty()) {
+                            addInfo(
+                                infoData,
+                                "Query Products - Result",
+                                listOf("No products found!")
                             )
-                            when (result) {
-                                is KBError -> {
-                                    // error
-                                }
-                                is KBPurchase -> {
-                                    // success
-                                    val purchase = result.purchase
-                                    // here you can get the purchase details and
-                                }
+                        } else {
+                            result.details.forEach {
+                                val product = it.product
+                                val details = it.details
+                                addInfo(infoData, "Product $product", listOf(details.toString()))
                             }
-                            val title = label.toString()
-                            val info = result.toString()
-                            addInfo(title, listOf(info))
                         }
+                    }
+                }
+
+                addInfo(infoData, "Quering purchases...")
+                val result2 = KotBilling.queryPurchases(ProductType.InApp)
+                // or subscriptions
+                // val result = KotBilling.queryPurchases(ProductType.Subscription)
+                when (result2) {
+                    is KBError -> {
+                        val connectionState = result2.connectionState
+                        val errorType = result2.errorType
+                        //when (errorType) {
+                        //    // handle all possible error cases differently if needed
+                        //}
+                        addInfo(
+                            infoData,
+                            "Query Purchases - Error",
+                            listOf(connectionState.toString(), errorType.toString())
+                        )
+                    }
+
+                    is KBPurchaseQuery -> {
+                        if (result2.details.isEmpty()) {
+                            addInfo(infoData, "Query Purchases", listOf("No purchases found!"))
+                        } else {
+                            val productType = result2.productType
+                            result2.details.forEach {
+                                addInfo(
+                                    infoData,
+                                    "Query Purchases - Purchase",
+                                    listOf(it.toString())
+                                )
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+        DemoAppThemeRegionDetailed(
+            state = regionsState
+        )
+
+        DemoCollapsibleRegion(
+            regionId = 1,
+            title = "Billing Example",
+            state = regionsState
+        ) {
+            // Menu
+            Button(
+                onClick = {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        val result =
+                            KotBilling.queryProducts(listOf(DemoBillingSetup.PRODUCT_NOT_CONSUMABLE))
+                        val title = "Query Purchased"
+                        val info = result.toString()
+                        addInfo(infoData, title, listOf(info))
+                    }
+                }
+            ) {
+                Text("QUERY One Time Purchases")
+            }
+            Button(
+                onClick = {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        val result = KotBilling.purchase(
+                            this@DemoActivity,
+                            DemoBillingSetup.PRODUCT_NOT_CONSUMABLE,
+                            null
+                        )
+                        when (result) {
+                            is KBError -> {
+                                // error
+                            }
+
+                            is KBPurchase -> {
+                                // success
+                                val purchase = result.purchase
+                                // here you can get the purchase details and
+                            }
+                        }
+                        val title = "Test Purchase"
+                        val info = result.toString()
+                        addInfo(infoData, title, listOf(info))
+                    }
+                }
+            ) {
+                Text("EXECUTE Purchase")
+            }
+        }
+
+        DemoCollapsibleRegion(
+            modifier = Modifier.weight(1f),
+            title = "Infos",
+            regionId = 2,
+            state = regionsState
+        ) {
+            LazyColumn {
+                items(infoData.size) {
+                    infoData.forEachIndexed { index, info ->
+
+                        val sb = SpannableStringBuilder()
+
+                        // 1) append title
+                        val titleInfo = "[$index] ${info.title}"
+                        val spannable = SpannableString(titleInfo).apply {
+                            setSpan(
+                                ForegroundColorSpan(Color.RED),
+                                0,
+                                titleInfo.length,
+                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                        }
+                        sb.append(spannable)
+                        sb.append("\n")
+
+                        // 2) append all info lines
+                        info.infos.forEach {
+                            sb.append(it)
+                            sb.append("\n")
+                        }
+
+                        Text(sb.toString())
                     }
                 }
             }
         }
-        popupMenu.show(this, view)
     }
 
     // --------------
@@ -163,42 +221,11 @@ class DemoActivity : AppCompatActivity() {
         val infos: List<String>
     )
 
-    private val infoData = ArrayList<Info>()
-
-    private suspend fun addInfo(title: String, infos: List<String> = emptyList()) {
-
-        val sb = SpannableStringBuilder()
+    private fun addInfo(
+        infoData: SnapshotStateList<Info>,
+        title: String,
+        infos: List<String> = emptyList()
+    ) {
         infoData.add(Info(title, infos))
-
-        withContext(Dispatchers.IO) {
-            infoData.forEachIndexed { index, info ->
-
-                // 1) append title
-                val titleInfo = "[$index] ${info.title}"
-                val spannable = SpannableString(titleInfo).apply {
-                    setSpan(
-                        ForegroundColorSpan(Color.RED),
-                        0,
-                        titleInfo.length,
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
-                }
-                sb.append(spannable)
-                sb.append("\n")
-
-                // 2) append all info lines
-                info.infos.forEach {
-                    sb.append(it)
-                    sb.append("\n")
-                }
-
-                // 3) append an extra empty line
-                sb.append("\n")
-            }
-        }
-
-        withContext(Dispatchers.Main) {
-            binding.tvInfos.text = sb.toString()
-        }
     }
 }
