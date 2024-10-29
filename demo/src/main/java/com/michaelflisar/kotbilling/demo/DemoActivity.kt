@@ -16,10 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
-import com.michaelflisar.demoutilities.DemoActivity
-import com.michaelflisar.demoutilities.composables.DemoAppThemeRegionDetailed
-import com.michaelflisar.demoutilities.composables.DemoCollapsibleRegion
-import com.michaelflisar.demoutilities.composables.ExpandedRegionState
 import com.michaelflisar.composethemer.ComposeTheme
 import com.michaelflisar.kotbilling.KotBilling
 import com.michaelflisar.kotbilling.classes.ProductType
@@ -27,21 +23,23 @@ import com.michaelflisar.kotbilling.results.KBError
 import com.michaelflisar.kotbilling.results.KBProductDetailsList
 import com.michaelflisar.kotbilling.results.KBPurchase
 import com.michaelflisar.kotbilling.results.KBPurchaseQuery
+import com.michaelflisar.toolbox.androiddemoapp.composables.DemoAppThemeRegionDetailed
+import com.michaelflisar.toolbox.androiddemoapp.composables.DemoCollapsibleRegion
+import com.michaelflisar.toolbox.androiddemoapp.composables.rememberDemoExpandedRegions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class DemoActivity : DemoActivity(
+class DemoActivity : com.michaelflisar.toolbox.androiddemoapp.DemoActivity(
     scrollableContent = false
 ) {
-    override val initialExpandedRegions = listOf(1, 2)
+    //override val initialExpandedRegions = listOf(1, 2)
 
     @Composable
     override fun ColumnScope.Content(
-        regionsState: ExpandedRegionState,
         themeState: ComposeTheme.State
     ) {
-
+        val regionsState = rememberDemoExpandedRegions(listOf(1, 2))
         val infoData = remember { mutableStateListOf<Info>() }
 
         LaunchedEffect(Unit) {

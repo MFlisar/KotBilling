@@ -15,6 +15,7 @@ plugins {
 
 // Module
 val artifactId = "library"
+val androidNamespace = "com.michaelflisar.kotbilling"
 
 // Library
 val libraryName = "KotBilling"
@@ -31,7 +32,7 @@ val licenseUrl = "$github/blob/main/LICENSE"
 
 android {
 
-    namespace = "com.michaelflisar.kotbilling"
+    namespace = androidNamespace
 
     compileSdk = app.versions.compileSdk.get().toInt()
 
@@ -126,7 +127,7 @@ mavenPublishing {
     }
 
     // Configure publishing to Maven Central
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, true)
 
     // Enable GPG signing for all publications
     signAllPublications()

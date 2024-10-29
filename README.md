@@ -1,7 +1,6 @@
 [![Maven](https://img.shields.io/maven-central/v/io.github.mflisar.kotbilling/core?style=for-the-badge&color=blue)](https://central.sonatype.com/namespace/io.github.mflisar.kotbilling)
 [![API](https://img.shields.io/badge/api-21%2B-brightgreen.svg?style=for-the-badge)](https://android-arsenal.com/api?level=21)
 [![Kotlin](https://img.shields.io/github/languages/top/mflisar/kotbilling.svg?style=for-the-badge&color=blueviolet)](https://kotlinlang.org/)
-[![KMP](https://img.shields.io/badge/Kotlin_Multiplatform-blue?style=for-the-badge&label=Kotlin)](https://kotlinlang.org/docs/multiplatform.html)
 [![License](https://img.shields.io/github/license/MFlisar/KotBilling?style=for-the-badge)](LICENSE)
 
 <h1 align="center">KotBilling</h1>
@@ -14,15 +13,11 @@ A kotlin coroutine based solution for handling in app purchases for **billing li
 * simple query function to query a product state: `val result = KotBilling.queryProducts(... products ...)`
 * simple purchase function to buy a product and acknowledge/consume it: `val result = KotBilling.purchase(actvity, product, offerToken)`
 
-## :camera: Screenshots
-
---
-
 ## :link: Dependencies
 
 | Dependency                                                                                                                    | Version |
 |:------------------------------------------------------------------------------------------------------------------------------|--------:|
-| [com.android.billingclient:billing-ktx](https://mvnrepository.com/artifact/com.android.billingclient/billing-ktx?repo=google) | `7.0.0` |
+| [com.android.billingclient:billing-ktx](https://mvnrepository.com/artifact/com.android.billingclient/billing-ktx?repo=google) | `7.1.1` |
 
 ## :elephant: Gradle
 

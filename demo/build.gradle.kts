@@ -67,6 +67,7 @@ dependencies {
 
     //implementation(libs.popupmenu)
 
-    implementation(libs.demoutilities.core)
-    implementation(libs.demoutilities.app)
+    implementation(libs.toolbox.core)
+    implementation(libs.toolbox.ui)
+    implementation(libs.toolbox.app)
 }
