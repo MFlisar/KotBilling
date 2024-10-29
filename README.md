@@ -1,4 +1,4 @@
-[![Maven](https://img.shields.io/maven-central/v/io.github.mflisar.kotbilling/core?style=for-the-badge&color=blue)](https://central.sonatype.com/namespace/io.github.mflisar.kotbilling)
+[![Maven](https://img.shields.io/maven-central/v/io.github.mflisar.kotbilling/library?style=for-the-badge&color=blue)](https://central.sonatype.com/namespace/io.github.mflisar.kotbilling)
 [![API](https://img.shields.io/badge/api-21%2B-brightgreen.svg?style=for-the-badge)](https://android-arsenal.com/api?level=21)
 [![Kotlin](https://img.shields.io/github/languages/top/mflisar/kotbilling.svg?style=for-the-badge&color=blueviolet)](https://kotlinlang.org/)
 [![License](https://img.shields.io/github/license/MFlisar/KotBilling?style=for-the-badge)](LICENSE)
