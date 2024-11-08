@@ -4,43 +4,25 @@ gradle = 				        "8.5.2"
 kotlin = 				        "2.0.21"
 dokka =                         "1.9.20"
 gradle-maven-publish-plugin =   "0.30.0"
-
-# KotlinX / AndroidX / Google
 compose =                       "1.7.0"
-androidx-core = 				"1.13.1"
-androidx-lifecycle = 		    "2.8.6"
-androidx-appcompat = 		    "1.7.0"
-androidx-startup = 	            "1.2.0"
-
-billing =		                "7.1.1"
-toolbox =                       "2.2.0"
 
 [plugins]
 
+# android
 android-application = 			    { id = "com.android.application",                   version.ref = "gradle" }
 android-library = 			        { id = "com.android.library", 	                    version.ref = "gradle" }
 
+# kotlin
 kotlin-android = 				    { id = "org.jetbrains.kotlin.android", 			    version.ref = "kotlin" }
 kotlin-compose = 				    { id = "org.jetbrains.kotlin.plugin.compose", 	    version.ref = "kotlin" }
 kotlin-parcelize =                  { id = "org.jetbrains.kotlin.plugin.parcelize",     version.ref = "kotlin"  }
 
+# github release (dokka + maven)
 dokka =                             { id = "org.jetbrains.dokka",                       version.ref = "dokka" }
 gradle-maven-publish-plugin =       { id = "com.vanniktech.maven.publish.base",         version.ref = "gradle-maven-publish-plugin" }
 
 [libraries]
 
-kotlin =						    { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", 		version.ref = "kotlin" }
-
-androidx-core = 				    { module = "androidx.core:core-ktx", 						version.ref = "androidx-core" }
-androidx-lifecycle = 		        { module = "androidx.lifecycle:lifecycle-runtime-ktx", 		version.ref = "androidx-lifecycle" }
-androidx-appcompat = 		        { module = "androidx.appcompat:appcompat", 					version.ref = "androidx-appcompat" }
-androidx-startup = 		            { module = "androidx.startup:startup-runtime", 			    version.ref = "androidx-startup" }
-
 compose-material-icons-core = 	    { module = "org.jetbrains.compose.material:material-icons-core",        version.ref = "compose" }
 compose-material-icons-extended = 	{ module = "org.jetbrains.compose.material:material-icons-extended",    version.ref = "compose" }
 compose-material3 =                 { module = "org.jetbrains.compose.material3:material3",                 version.ref = "compose" }
-
-billing =			                { module = "com.android.billingclient:billing-ktx", 		version.ref = "billing" }
-toolbox-core =                      { module = "io.github.mflisar.toolbox:core", 			    version.ref = "toolbox" }
-toolbox-ui =                        { module = "io.github.mflisar.toolbox:ui", 			        version.ref = "toolbox" }
-toolbox-app =                       { module = "io.github.mflisar.toolbox:android-demo-app",    version.ref = "toolbox" }

@@ -42,18 +42,12 @@ android {
 dependencies {
 
     // ------------------------
-    // Kotlin
-    // ------------------------
-
-    implementation(libs.kotlin)
-
-    // ------------------------
     // AndroidX
     // ------------------------
 
-    implementation(libs.androidx.core)
-    implementation(libs.androidx.lifecycle)
-    implementation(libs.androidx.appcompat)
+    implementation(androidx.core)
+    implementation(androidx.lifecycle)
+    implementation(androidx.appcompat)
 
     implementation(libs.compose.material3)
     implementation(libs.compose.material.icons.core)
@@ -67,7 +61,7 @@ dependencies {
 
     //implementation(libs.popupmenu)
 
-    implementation(libs.toolbox.core)
-    implementation(libs.toolbox.ui)
-    implementation(libs.toolbox.app)
+    implementation(deps.toolbox.core)
+    implementation(deps.toolbox.ui)
+    implementation(deps.toolbox.app)
 }

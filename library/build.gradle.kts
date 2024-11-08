@@ -70,24 +70,18 @@ android {
 dependencies {
 
     // ------------------------
-    // Kotlin
-    // ------------------------
-
-    implementation(libs.kotlin)
-
-    // ------------------------
     // AndroidX / Google / Goolge
     // ------------------------
 
-    implementation(libs.androidx.core)
-    implementation(libs.androidx.lifecycle)
-    implementation(libs.androidx.startup)
+    implementation(androidx.core)
+    implementation(androidx.lifecycle)
+    implementation(androidx.startup)
 
     // ------------------------
     // Others
     // ------------------------
 
-    implementation(libs.billing)
+    implementation(deps.billing)
 }
 
 mavenPublishing {

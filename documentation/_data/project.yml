@@ -1,0 +1,56 @@
+# -------
+# Library
+# -------
+
+library:
+  name: KotBilling
+  api: 21
+  github: MFlisar/KotBilling
+  maven: io.github.mflisar.kotbilling
+  maven-main-library: library
+  multiplatform: false
+  screenshots: []
+  branch: main
+  demo: true
+
+# ------------
+# Dependencies
+# ------------
+
+# nicht notwendig, da library keine platforms unterstützt noch dependencies hat noch module
+
+# optional
+#dependencies:
+#  compose:
+#    cmp: 1.7.0
+#    compose: 1.7.1
+#    material3: 1.3.0
+#    experimantal: true
+
+# -------------
+# Module
+# -------------
+
+#modules:
+  #- # name: ""            # single module braucht keinen Namen!
+    # group: ""           # single module braucht keine Gruppe!
+    # description: ""     # single module braucht keine Beschreibung!
+    # optional: false     # single module ist nie optional
+    #platforms:           # optionales Array - wird nur bei multiplatform genutzt!
+    #  android: true
+    #  ios: true
+    #  jvm: true
+    #  info:
+    #dependencies:         # optionales Array
+    #  - name: FeedbackManager
+    #    link: https://mflisar.github.io/CacheFileProvider/
+    #    version: 0.4.0
+
+# GRUPPEN - optional: nur bei mehreren Modulen benötigt!
+#groups:
+#  - name: a
+#    label: Gruppe A
+#    gradle-comment: "Gruppe A..."
+#  - name: b
+#    label: Gruppe B
+#    gradle-comment: "Gruppe B..."
