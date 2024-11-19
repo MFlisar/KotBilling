@@ -25,7 +25,7 @@ internal class KotBillingManager(
     init {
         client = BillingClient.newBuilder(context.applicationContext)
             .setListener(purchasesUpdatedListener)
-            .enablePendingPurchases()
+            .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
             .build()
     }
 
