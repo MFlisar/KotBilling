@@ -32,7 +32,7 @@ library:
 # -------------
 
 modules:
-  #- # name: ""            # single module braucht keinen Namen!
+  - # name: ""            # single module braucht keinen Namen!
     # group: ""           # single module braucht keine Gruppe!
     # description: ""     # single module braucht keine Beschreibung!
     # optional: false     # single module ist nie optional
