@@ -31,7 +31,7 @@ library:
 # Module
 # -------------
 
-#modules:
+modules:
   #- # name: ""            # single module braucht keinen Namen!
     # group: ""           # single module braucht keine Gruppe!
     # description: ""     # single module braucht keine Beschreibung!
@@ -41,10 +41,10 @@ library:
     #  ios: true
     #  jvm: true
     #  info:
-    #dependencies:         # optionales Array
-    #  - name: FeedbackManager
-    #    link: https://mflisar.github.io/CacheFileProvider/
-    #    version: 0.4.0
+    dependencies:         # optionales Array
+      - name: billing
+        link: https://developer.android.com/google/play/billing/integrate
+        version: 7.1.1
 
 # GRUPPEN - optional: nur bei mehreren Modulen benötigt!
 #groups:
