@@ -13,18 +13,36 @@ plugins {
 // Informations
 // -------------------
 
+val description = "A kotlin coroutine based solution for handling in app purchases with the android billing library."
+
 // Module
 val artifactId = "library"
 val androidNamespace = "com.michaelflisar.kotbilling"
 
 // Library
 val libraryName = "KotBilling"
-val libraryDescription = "A kotlin coroutine based solution for handling in app purchases with the android billing library."
+val libraryDescription = "KotBilling - $artifactId module - $description"
 val groupID = "io.github.mflisar.kotbilling"
 val release = 2022
 val github = "https://github.com/MFlisar/KotBilling"
 val license = "Apache License 2.0"
 val licenseUrl = "$github/blob/main/LICENSE"
+
+// -------------------
+// Variables for Documentation Generator
+// -------------------
+
+// # DEP + GROUP are optional arrays!
+
+// OPTIONAL = "false"               // defines if this module is optional or not
+// GROUP_ID = "core"                // defines the "grouping" in the documentation this module belongs to
+// DEP = "deps.billing|Play Billing|https://developer.android.com/google/play/billing/integrate"
+// PLATFORM_INFO = ""               // defines a comment that will be shown in the documentation for this modules platform support
+
+// GLOBAL DATA
+// BRANCH = "master"        // defines the branch on github (master/main)
+// GROUP = "core|Core|core"
+// #GROUP = "modules|Modules|dialog modules"
 
 // -------------------
 // Setup
