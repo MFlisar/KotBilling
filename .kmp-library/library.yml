@@ -21,7 +21,7 @@ library:
   release: 2022
   link-docs: https://mflisar.github.io/KotBilling/
   link-repo: https://github.com/MFlisar/KotBilling/
-  repo-name: mflisar/CacheFileProvider # the label of the repo link on the mkdocs homepage at the top right
+  repo-name: mflisar/KotBilling # the label of the repo link on the mkdocs homepage at the top right
   # TODO: autom. detecten?
   license:
     name: Apache License 2.0
@@ -30,5 +30,5 @@ library:
   about-me: true # set to true if you want to show the about me section on the homepage
 
 maven:
-  group-id: io.github.mflisar.KotBilling
+  group-id: io.github.mflisar.kotbilling
   primary-artifact-id: library # used to detect latest release version of the library (dynamically on the published homepage)

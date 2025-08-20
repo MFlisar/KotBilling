@@ -83,6 +83,7 @@ dependencies {
 
     implementation(deps.billing)
 }
+
 // -------------------
 // Configurations
 // -------------------
