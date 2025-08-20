@@ -35,7 +35,11 @@ modules:
     description: A kotlin coroutine based solution for handling in app purchases with the android billing library.
     optional: false
     platforms-info: ""
-    dependencies: []
+    dependencies:
+      - name: Google Play Billing Library
+        versions-file: deps.versions.toml
+        versions-key: billing
+        link: https://developer.android.com/google/play/billing/integrate
 
 
 
