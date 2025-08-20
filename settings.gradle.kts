@@ -1,12 +1,3 @@
-pluginManagement {
-
-    // repositories for build
-    repositories {
-        mavenCentral()
-        google()
-    }
-}
-
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
@@ -24,6 +15,17 @@ dependencyResolutionManagement {
         create("deps") {
             from(files("gradle/deps.versions.toml"))
         }
+    }
+}
+
+pluginManagement {
+
+    // repositories for build
+    repositories {
+        mavenCentral()
+        google()
+        gradlePluginPortal()
+        maven("https://jitpack.io")
     }
 }
 

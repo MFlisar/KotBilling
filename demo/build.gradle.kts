@@ -47,7 +47,7 @@ dependencies {
 
     implementation(androidx.core)
     implementation(androidx.lifecycle)
-    implementation(androidx.appcompat)
+    implementation(androidx.activity.compose)
 
     implementation(libs.compose.material3)
     implementation(libs.compose.material.icons.core)
@@ -59,9 +59,5 @@ dependencies {
 
     implementation(project(":library"))
 
-    //implementation(libs.popupmenu)
-
-    implementation(deps.toolbox.core)
-    implementation(deps.toolbox.ui)
-    implementation(deps.toolbox.app)
+    implementation(deps.kmp.democomposables)
 }

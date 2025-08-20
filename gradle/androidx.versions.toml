@@ -1,13 +1,13 @@
 [versions]
 
-core = 				"1.13.1"
-lifecycle = 		"2.8.6"
-appcompat = 		"1.7.0"
+core = 		        "1.16.0"
+lifecycle = 		"2.9.2"
 startup = 	        "1.2.0"
+activity = 		    "1.10.1"
 
 [libraries]
 
-core = 				{ module = "androidx.core:core-ktx", 						version.ref = "core" }
-lifecycle = 		{ module = "androidx.lifecycle:lifecycle-runtime-ktx", 		version.ref = "lifecycle" }
-appcompat = 		{ module = "androidx.appcompat:appcompat", 					version.ref = "appcompat" }
-startup = 		    { module = "androidx.startup:startup-runtime", 			    version.ref = "startup" }
+core = 				        { module = "androidx.core:core-ktx", 						version.ref = "core" }
+lifecycle = 		        { module = "androidx.lifecycle:lifecycle-runtime-ktx", 		version.ref = "lifecycle" }
+startup = 		            { module = "androidx.startup:startup-runtime", 			    version.ref = "startup" }
+activity-compose =          { module = "androidx.activity:activity-compose", 			version.ref = "activity" }

@@ -1,11 +1,19 @@
 [versions]
 
-billing =		                "7.1.1"
-toolbox =                       "2.2.0"
+# mflisar
+kmp-library =               "1.7.4"
+kmp-democomposables =       "1.0.2"
+
+billing =		            "7.1.1"
+
+[plugins]
+
+kmplibrary-buildplugin =            { id = "io.github.mflisar.kmp-library.plugins-build-gradle",           version.ref = "kmp-library" }
 
 [libraries]
 
-billing =			                { module = "com.android.billingclient:billing-ktx", 		version.ref = "billing" }
-toolbox-core =                      { module = "io.github.mflisar.toolbox:core", 			    version.ref = "toolbox" }
-toolbox-ui =                        { module = "io.github.mflisar.toolbox:ui", 			        version.ref = "toolbox" }
-toolbox-app =                       { module = "io.github.mflisar.toolbox:android-demo-app",    version.ref = "toolbox" }
+# mflisar
+kmplibrary-docs =                   { module = "io.github.mflisar.kmp-library:docs",                        version.ref = "kmp-library" }
+kmp-democomposables =               { module = "io.github.mflisar.democomposables:library",                 version.ref = "kmp-democomposables" }
+
+billing =			                { module = "com.android.billingclient:billing-ktx", 		            version.ref = "billing" }

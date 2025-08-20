@@ -1,5 +1,6 @@
 import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
-import com.vanniktech.maven.publish.SonatypeHost
+import com.michaelflisar.kmplibrary.BuildFilePlugin
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlin.android)
@@ -7,46 +8,27 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.dokka)
     alias(libs.plugins.gradle.maven.publish.plugin)
+    alias(deps.plugins.kmplibrary.buildplugin)
 }
+
+// get build file plugin
+val buildFilePlugin = project.plugins.getPlugin(BuildFilePlugin::class.java)
 
 // -------------------
 // Informations
 // -------------------
 
-val description = "A kotlin coroutine based solution for handling in app purchases with the android billing library."
-
-// Module
-val artifactId = "library"
 val androidNamespace = "com.michaelflisar.kotbilling"
-
-// Library
-val libraryName = "KotBilling"
-val libraryDescription = "KotBilling - $artifactId module - $description"
-val groupID = "io.github.mflisar.kotbilling"
-val release = 2022
-val github = "https://github.com/MFlisar/KotBilling"
-val license = "Apache License 2.0"
-val licenseUrl = "$github/blob/main/LICENSE"
-
-// -------------------
-// Variables for Documentation Generator
-// -------------------
-
-// # DEP + GROUP are optional arrays!
-
-// OPTIONAL = "false"               // defines if this module is optional or not
-// GROUP_ID = "core"                // defines the "grouping" in the documentation this module belongs to
-// DEP = "deps.billing|Play Billing|https://developer.android.com/google/play/billing/integrate"
-// PLATFORM_INFO = ""               // defines a comment that will be shown in the documentation for this modules platform support
-
-// GLOBAL DATA
-// BRANCH = "master"        // defines the branch on github (master/main)
-// GROUP = "core|Core|core"
-// #GROUP = "modules|Modules|dialog modules"
 
 // -------------------
 // Setup
 // -------------------
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
+    }
+}
 
 android {
 
@@ -101,46 +83,22 @@ dependencies {
 
     implementation(deps.billing)
 }
+// -------------------
+// Configurations
+// -------------------
 
-mavenPublishing {
-
-    configure(AndroidSingleVariantLibrary("release", true, true))
-
-    coordinates(
-        groupId = groupID,
-        artifactId = artifactId,
-        version = System.getenv("TAG")
+// android configuration
+android {
+    buildFilePlugin.setupAndroidLibrary(
+        androidNamespace = androidNamespace,
+        compileSdk = app.versions.compileSdk,
+        minSdk = app.versions.minSdk,
+        buildConfig = false
     )
-
-    pom {
-        name.set(libraryName)
-        description.set(libraryDescription)
-        inceptionYear.set("$release")
-        url.set(github)
-
-        licenses {
-            license {
-                name.set(license)
-                url.set(licenseUrl)
-            }
-        }
-
-        developers {
-            developer {
-                id.set("mflisar")
-                name.set("Michael Flisar")
-                email.set("mflisar.development@gmail.com")
-            }
-        }
-
-        scm {
-            url.set(github)
-        }
-    }
-
-    // Configure publishing to Maven Central
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, true)
-
-    // Enable GPG signing for all publications
-    signAllPublications()
 }
+
+// maven publish configuration
+if (buildFilePlugin.checkGradleProperty("publishToMaven") != false)
+    buildFilePlugin.setupMavenPublish(
+        platform = AndroidSingleVariantLibrary("release", true, true)
+    )

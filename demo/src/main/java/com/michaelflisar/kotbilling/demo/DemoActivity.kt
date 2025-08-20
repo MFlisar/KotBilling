@@ -1,13 +1,18 @@
 package com.michaelflisar.kotbilling.demo
 
 import android.graphics.Color
+import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,29 +20,46 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.lifecycleScope
-import com.michaelflisar.composethemer.ComposeTheme
+import com.michaelflisar.democomposables.DemoScaffold
+import com.michaelflisar.democomposables.layout.DemoCollapsibleRegion
+import com.michaelflisar.democomposables.layout.DemoColumn
+import com.michaelflisar.democomposables.layout.rememberDemoExpandedRegions
 import com.michaelflisar.kotbilling.KotBilling
 import com.michaelflisar.kotbilling.classes.ProductType
 import com.michaelflisar.kotbilling.results.KBError
 import com.michaelflisar.kotbilling.results.KBProductDetailsList
 import com.michaelflisar.kotbilling.results.KBPurchase
 import com.michaelflisar.kotbilling.results.KBPurchaseQuery
-import com.michaelflisar.toolbox.androiddemoapp.composables.DemoAppThemeRegionDetailed
-import com.michaelflisar.toolbox.androiddemoapp.composables.DemoCollapsibleRegion
-import com.michaelflisar.toolbox.androiddemoapp.composables.rememberDemoExpandedRegions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class DemoActivity : com.michaelflisar.toolbox.androiddemoapp.DemoActivity(
-    scrollableContent = false
-) {
-    //override val initialExpandedRegions = listOf(1, 2)
+class DemoActivity : ComponentActivity() {
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            MaterialTheme {
+                DemoScaffold(
+                    appName = stringResource(R.string.app_name)
+                ) { modifier, showInfo ->
+                    DemoContent(
+                        modifier = modifier,
+                        showInfo = showInfo
+                    )
+                }
+            }
+        }
+    }
 
     @Composable
-    override fun ColumnScope.Content(
-        themeState: ComposeTheme.State
+    fun DemoContent(
+        modifier: Modifier = Modifier,
+        showInfo: (info: String) -> Unit
     ) {
         val regionsState = rememberDemoExpandedRegions(listOf(1, 2))
         val infoData = remember { mutableStateListOf<Info>() }
@@ -120,90 +142,89 @@ class DemoActivity : com.michaelflisar.toolbox.androiddemoapp.DemoActivity(
             }
         }
 
-        DemoAppThemeRegionDetailed(
-            state = regionsState
-        )
+        DemoColumn(modifier = modifier) {
 
-        DemoCollapsibleRegion(
-            regionId = 1,
-            title = "Billing Example",
-            state = regionsState
-        ) {
-            // Menu
-            Button(
-                onClick = {
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        val result =
-                            KotBilling.queryProducts(listOf(DemoBillingSetup.PRODUCT_NOT_CONSUMABLE))
-                        val title = "Query Purchased"
-                        val info = result.toString()
-                        addInfo(infoData, title, listOf(info))
-                    }
-                }
+            DemoCollapsibleRegion(
+                regionId = 1,
+                title = "Billing Example",
+                state = regionsState
             ) {
-                Text("QUERY One Time Purchases")
-            }
-            Button(
-                onClick = {
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        val result = KotBilling.purchase(
-                            this@DemoActivity,
-                            DemoBillingSetup.PRODUCT_NOT_CONSUMABLE,
-                            null
-                        )
-                        when (result) {
-                            is KBError -> {
-                                // error
-                            }
-
-                            is KBPurchase -> {
-                                // success
-                                val purchase = result.purchase
-                                // here you can get the purchase details and
-                            }
+                // Menu
+                Button(
+                    onClick = {
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            val result =
+                                KotBilling.queryProducts(listOf(DemoBillingSetup.PRODUCT_NOT_CONSUMABLE))
+                            val title = "Query Purchased"
+                            val info = result.toString()
+                            addInfo(infoData, title, listOf(info))
                         }
-                        val title = "Test Purchase"
-                        val info = result.toString()
-                        addInfo(infoData, title, listOf(info))
                     }
+                ) {
+                    Text("QUERY One Time Purchases")
                 }
-            ) {
-                Text("EXECUTE Purchase")
-            }
-        }
-
-        DemoCollapsibleRegion(
-            modifier = Modifier.weight(1f),
-            title = "Infos",
-            regionId = 2,
-            state = regionsState
-        ) {
-            LazyColumn {
-                items(infoData.size) {
-                    infoData.forEachIndexed { index, info ->
-
-                        val sb = SpannableStringBuilder()
-
-                        // 1) append title
-                        val titleInfo = "[$index] ${info.title}"
-                        val spannable = SpannableString(titleInfo).apply {
-                            setSpan(
-                                ForegroundColorSpan(Color.RED),
-                                0,
-                                titleInfo.length,
-                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                Button(
+                    onClick = {
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            val result = KotBilling.purchase(
+                                this@DemoActivity,
+                                DemoBillingSetup.PRODUCT_NOT_CONSUMABLE,
+                                null
                             )
-                        }
-                        sb.append(spannable)
-                        sb.append("\n")
+                            when (result) {
+                                is KBError -> {
+                                    // error
+                                }
 
-                        // 2) append all info lines
-                        info.infos.forEach {
-                            sb.append(it)
+                                is KBPurchase -> {
+                                    // success
+                                    val purchase = result.purchase
+                                    // here you can get the purchase details and
+                                }
+                            }
+                            val title = "Test Purchase"
+                            val info = result.toString()
+                            addInfo(infoData, title, listOf(info))
+                        }
+                    }
+                ) {
+                    Text("EXECUTE Purchase")
+                }
+            }
+
+            DemoCollapsibleRegion(
+                modifier = Modifier.weight(1f),
+                title = "Infos",
+                regionId = 2,
+                state = regionsState
+            ) {
+                LazyColumn {
+                    items(infoData.size) {
+                        infoData.forEachIndexed { index, info ->
+
+                            val sb = SpannableStringBuilder()
+
+                            // 1) append title
+                            val titleInfo = "[$index] ${info.title}"
+                            val spannable = SpannableString(titleInfo).apply {
+                                setSpan(
+                                    ForegroundColorSpan(Color.RED),
+                                    0,
+                                    titleInfo.length,
+                                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                                )
+                            }
+                            sb.append(spannable)
                             sb.append("\n")
-                        }
 
-                        Text(sb.toString())
+                            // 2) append all info lines
+                            info.infos.forEach {
+                                sb.append(it)
+                                sb.append("\n")
+                            }
+
+                            Text(sb.toString())
+                        }
                     }
                 }
             }
