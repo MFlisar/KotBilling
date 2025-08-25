@@ -26,44 +26,7 @@ val androidNamespace = "com.michaelflisar.kotbilling"
 
 kotlin {
     compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_17)
-    }
-}
-
-android {
-
-    namespace = androidNamespace
-
-    compileSdk = app.versions.compileSdk.get().toInt()
-
-    buildFeatures {
-        viewBinding = true
-    }
-
-    defaultConfig {
-        minSdk = app.versions.minSdk.get().toInt()
-        vectorDrawables.useSupportLibrary = true
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-            consumerProguardFiles("proguard-rules.pro")
-        }
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-
-    lint {
-        abortOnError = false
+        jvmTarget.set(JvmTarget.fromTarget(buildFilePlugin.javaVersion()))
     }
 }
 
